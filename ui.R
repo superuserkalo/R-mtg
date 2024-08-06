@@ -33,7 +33,8 @@ page_fixed(
         card(
           style =   "display: flex; flex-direction: column; justify-content: center; align-items: center; align: center; width: 60%;",
           actionButton("loginAccount", label = "Login"),
-          actionButton("createAccount", label = "Create Account")
+          actionButton("createAccount", label = "Create Account"),
+          
         ),
     )
   ),
