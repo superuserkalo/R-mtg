@@ -14,29 +14,29 @@ custom_theme <- bs_theme(
   dark = "#343a40"
 )
 
-# Define UI for application
-ui <- page_fixed(
+page_fixed(
   
   window_title = "ada",
   title = "HEY",
   
-  # Input fields section
-  layout_columns(
-    card(
-      textInput("EnterUserInput", "Enter Username", ""),
-      textInput("EnterPassInput", "Enter Password", ""),
-      cols_widths = c()
+  # Input section
+  fluidRow(
+    column(
+      width = 12,
+      offset =  2,
+        card(
+          style = "display: flex; flex-direction: column; justify-content: center; align-items: center; align: center; width: 60%;",
+          textInput("UserInput", "Enter Username", ""),
+          textInput("PassInput", "Enter Password", "")
+        ),
+        # Button section
+        card(
+          style = "display: flex; flex-direction: column; justify-content: center; align-items: center; align: center; width: 60%;",
+          actionButton("loginAccount", label = "Login"),
+          actionButton("createAccount", label = "Create Account")
+        ),
     )
   ),
- 
-  
-  # Buttons section
-  layout_columns(
-    card(
-      actionButton("login", label = "Login", width = "55%"),
-      actionButton("createAccount", label = "Create Account", width = "55%")
-    ),
-  ),
-  
+  # Loads custom theme
   theme = custom_theme
 )
