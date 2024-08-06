@@ -1,0 +1,26 @@
+{
+    "id": "A9C5F01A",
+    "path": "~/Documents/Test/server.R",
+    "project_path": "server.R",
+    "type": "r_source",
+    "hash": "3849520884",
+    "contents": "",
+    "dirty": false,
+    "created": 1722929757792.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "19,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1722934825,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1722934825418,
+    "read_only": false,
+    "read_only_alternatives": []
+}
