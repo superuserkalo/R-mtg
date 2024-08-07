@@ -4,7 +4,7 @@ library(sodium)
 library(glue)
 library(shinyalert)
 
-account_init <- function(username, password){
+account_creation <- function(username, password){
   conn <- dbConnect(RSQLite::SQLite(), dbname = "MTG.db")
   
   table_exists <- dbExistsTable(conn,username)
@@ -31,15 +31,79 @@ account_init <- function(username, password){
   }
 }
 
+login <- function(username, password){
+  conn <- dbConnect(RSQLite::SQLite(), dbname = "MTG.db")
+  
+  if (!dbExistsTable(conn, username)) {
+    dbDisconnect(conn)
+    shinyalert("Login failed!", "The account for this username doesn't exist", type = "error")  
+    return(FALSE)
+  }
+  
+  # Retrieve the stored hashes
+  query <- glue("SELECT username_hash, password_hash FROM {username} LIMIT 1")
+  result <- dbGetQuery(conn, query)
+  dbDisconnect(conn)
+  
+  if (nrow(result) == 0) {
+    return(FALSE)
+  }
+  
+  stored_username_hash <- result$username_hash[[1]]
+  stored_password_hash <- result$password_hash[[1]]
+  
+  # Verify username and password
+  username_verified <- sodium::password_verify(stored_username_hash, username)
+  password_verified <- sodium::password_verify(stored_password_hash, password)
+  
+  if (!username_verified || !password_verified) {
+    shinyalert("Error", "Invalid username or password", type = "error")
+    return(FALSE)
+  }
+  
+  return(TRUE)
+
+}
+
+empty_fields <- function(username, password) {
+  
+  if (is.null(username) || username == "" || 
+      is.null(password) || password == "") {
+    shinyalert("Error", "Username and password cannot be empty", type = "error")
+    return(FALSE)
+  }
+  return(TRUE)
+}
+
+
+
 server <- function(input, output, session) {
   
   observeEvent(input$createAccount, {
     username_string <- input$usernameInput
     password_string <- input$passInput
     
-    account_init(username_string,password_string)    
+    if (empty_fields(username_string,password_string)) {
+      account_creation(username_string,password_string)    
+      
+      updateTextInput(session, "usernameInput", value = "")
+      updateTextInput(session, "passInput", value = "")
+    }  
+    
 
     })
+  
+  observeEvent(input$loginAccount, {
+    username_string <- input$usernameInput
+    password_string <- input$passInput
+    
+    if (empty_fields(username_string,password_string)) {
+      login_successful <- login(username_string,password_string)
+      if (login_successful){
+        shinyalert("Success", "Login successful!", type = "success")
+      }
+    }
+  })
 }
 
 
