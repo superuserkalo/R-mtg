@@ -11,13 +11,25 @@ library(shiny)
 library(RSQLite)
 library(digest)
 library(glue)
+library(shinyalert)
+
+
+
 
 create_user_table <- function(conn, username) 
 {
+  table_exists <- dbExistsTable(conn, username)
   
-  query <- glue("CREATE TABLE IF NOT EXISTS {username} (id INTEGER PRIMARY KEY AUToINCREMENT, usernameH BLOB NOT NULL, passwordH BLOB NOT NULL);")
-  
-  dbExecute(conn, query)
+  if (table_exists) {
+    # Show an alert if the account already exists
+    shinyalert("Account already exists", "The account for this username already exists.", type = "error")
+  } else {
+    # Create the user table if it does not exist
+    query <- glue("CREATE TABLE IF NOT EXISTS {username} (id INTEGER PRIMARY KEY AUTOINCREMENT, usernameH BLOB NOT NULL, passwordH BLOB NOT NULL);")
+    dbExecute(conn, query)
+    # Show an alert if the account was successfully created
+    shinyalert("Account created", "The account has been successfully created.", type = "success")
+  }
   
 }
 
