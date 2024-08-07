@@ -16,27 +16,26 @@ custom_theme <- bs_theme(
 
 page_fixed(
   
-  window_title = "ada",
-  title = "HEY",
-  
-  # Input section
   fluidRow(
     column(
       width = 12,
       offset =  2,
+      # Input section
         card(
           style = "display: flex; flex-direction: column; justify-content: center; align-items: center; align: center; width: 60%;",
-          textInput("UserInput", "Enter Username", ""),
-          textInput("PassInput", "Enter Password", "")
+          textInput("usernameInput", "", placeholder = "Enter username"),
+          passwordInput("passInput", "", placeholder = "Enter password")
         ),
         # Button section
         card(
-          style =   "display: flex; flex-direction: column; justify-content: center; align-items: center; align: center; width: 60%;",
+          style = "display: flex; flex-direction: column; justify-content: center; align-items: center; align: center; width: 60%;",
           actionButton("loginAccount", label = "Login"),
-          actionButton("createAccount", label = "Create Account")
-        ),
+          actionButton("createAccount", label = "Create Account"),
+          verbatimTextOutput("statusOutput")
+        )
     )
   ),
+
   # Loads custom theme
   theme = custom_theme
 )
